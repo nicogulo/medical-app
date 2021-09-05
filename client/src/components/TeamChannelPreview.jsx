@@ -4,7 +4,7 @@ import { Avatar, useChatContext } from 'stream-chat-react';
 export default function TeamChannelPreview({ channel, type }) {
   const { channel: activeChannel, client } = useChatContext();
   const ChannelPreview = () => (
-    <p class="channel-preview__item">
+    <p className="channel-preview__item">
       # {channel?.data?.name || channel?.data?.id}
     </p>
   );
@@ -13,7 +13,7 @@ export default function TeamChannelPreview({ channel, type }) {
       ({ user }) => user.id !== client.userID
     );
     return (
-      <div class="channe-previw__item single">
+      <div className="channel-preview__item single">
         <Avatar
           image={members[0].user.image}
           name={members[0].user.fullname}
@@ -26,7 +26,7 @@ export default function TeamChannelPreview({ channel, type }) {
 
   return (
     <div
-      class={
+      className={
         channel?.id === activeChannel?.id
           ? 'channel-preview__wrapper__selected'
           : 'channel-preview__wrapper'
