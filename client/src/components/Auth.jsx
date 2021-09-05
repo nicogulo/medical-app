@@ -1,26 +1,58 @@
 import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
-import signImage from '../assets/signup.jpg';
+
+import signinImage from '../assets/signup.jpg';
+
+const cookies = new Cookies();
 
 const initialState = {
   fullName: '',
   username: '',
   password: '',
   confirmPassword: '',
-  phoneNummber: '',
+  phoneNumber: '',
   avatarURL: '',
 };
 
-export default function Auth() {
+const Auth = () => {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(true);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+
+    const { username, password, phoneNumber, avatarURL } = form;
+
+    const URL = 'http://localhost:5000/auth';
+    // const URL = 'https://medical-pager.herokuapp.com/auth';
+
+    const {
+      data: { token, userId, hashedPassword, fullName },
+    } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
+      username,
+      password,
+      fullName: form.fullName,
+      phoneNumber,
+      avatarURL,
+    });
+
+    cookies.set('token', token);
+    cookies.set('username', username);
+    cookies.set('fullName', fullName);
+    cookies.set('userId', userId);
+
+    if (isSignup) {
+      cookies.set('phoneNumber', phoneNumber);
+      cookies.set('avatarURL', avatarURL);
+      cookies.set('hashedPassword', hashedPassword);
+    }
+
+    window.location.reload();
   };
 
   const switchMode = () => {
@@ -37,8 +69,8 @@ export default function Auth() {
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="fullName">Full Name</label>
                 <input
-                  type="text"
                   name="fullName"
+                  type="text"
                   placeholder="Full Name"
                   onChange={handleChange}
                   required
@@ -46,10 +78,10 @@ export default function Auth() {
               </div>
             )}
             <div className="auth__form-container_fields-content_input">
-              <label htmlFor="username">UserName</label>
+              <label htmlFor="username">Username</label>
               <input
-                type="text"
                 name="username"
+                type="text"
                 placeholder="Username"
                 onChange={handleChange}
                 required
@@ -59,8 +91,8 @@ export default function Auth() {
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="phoneNumber">Phone Number</label>
                 <input
-                  type="text"
                   name="phoneNumber"
+                  type="text"
                   placeholder="Phone Number"
                   onChange={handleChange}
                   required
@@ -71,8 +103,8 @@ export default function Auth() {
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="avatarURL">Avatar URL</label>
                 <input
-                  type="text"
                   name="avatarURL"
+                  type="text"
                   placeholder="Avatar URL"
                   onChange={handleChange}
                   required
@@ -82,8 +114,8 @@ export default function Auth() {
             <div className="auth__form-container_fields-content_input">
               <label htmlFor="password">Password</label>
               <input
-                type="password"
                 name="password"
+                type="password"
                 placeholder="Password"
                 onChange={handleChange}
                 required
@@ -93,8 +125,8 @@ export default function Auth() {
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="confirmPassword">Confirm Password</label>
                 <input
-                  type="password"
                   name="confirmPassword"
+                  type="password"
                   placeholder="Confirm Password"
                   onChange={handleChange}
                   required
@@ -107,17 +139,19 @@ export default function Auth() {
           </form>
           <div className="auth__form-container_fields-account">
             <p>
-              {isSignup ? 'Already have an account?' : `Don't have an account?`}
+              {isSignup ? 'Already have an account?' : "Don't have an account?"}
               <span onClick={switchMode}>
-                {isSignup ? ' Sign In' : ' Sign Up'}
+                {isSignup ? 'Sign In' : 'Sign Up'}
               </span>
             </p>
           </div>
         </div>
       </div>
       <div className="auth__form-container_image">
-        <img src={signImage} alt="sign in" />
+        <img src={signinImage} alt="sign in" />
       </div>
     </div>
   );
-}
+};
+
+export default Auth;
