@@ -13,7 +13,7 @@ export default function ChannelContainer({
 
   if (isCreating) {
     return (
-      <div class="channel__container">
+      <div className="channel__container">
         <CreateChannel createType={createType} setIsCreating={setIsCreating} />
       </div>
     );
@@ -21,24 +21,24 @@ export default function ChannelContainer({
 
   if (isEditing) {
     return (
-      <div class="channel__container">
+      <div className="channel__container">
         <EditChannel setIsEditing={setIsEditing} />
       </div>
     );
   }
   const EmptyState = () => (
-    <div class="channel-empty__container">
-      <p class="channel-empty__first">
+    <div className="channel-empty__container">
+      <p className="channel-empty__first">
         This is the begining of your chat history
       </p>
-      <p class="channel-empty__second">
+      <p className="channel-empty__second">
         send messages, attachment, emojis and more!
       </p>
     </div>
   );
 
   return (
-    <div class="channel__container">
+    <div className="channel__container">
       <Channel
         EmptyStateIndicator={EmptyState}
         Mesage={(messageProps, i) => <MessageTeam key={i} {...messageProps} />}

@@ -718,6 +718,7 @@ body {
   align-items: center;
   flex: 2;
   text-align: left;
+  padding-bottom: 10px;
 }
 
 .user-item__wrapper p {
